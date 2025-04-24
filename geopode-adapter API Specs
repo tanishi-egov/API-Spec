@@ -1,0 +1,60 @@
+openapi: 3.0.1
+info:
+  title: Geopode Adapter
+  version: 1.0.0
+  description: APIs to integrate geopode APIs with boundary service.
+paths:
+  /geopode/boundary/_create:
+    post:
+      tags:
+      - Geopode Boundary
+      summary: API endpoint to create hierarchical boundary data.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GeopodeBoundaryRequest"
+      responses:
+        202:
+          description: Accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GeopodeBoundaryResponse'
+        400:
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/DIGIT-Specs/master/Common%20Services/common-contract.yaml#/components/schemas/ErrorRes'
+  
+
+components:
+  schemas:
+    GeopodeBoundaryRequest:
+      type: object
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/DIGIT-Specs/master/Common%20Services/common-contract.yaml#/components/schemas/RequestInfo'
+        GeopodeBoundary:
+          $ref: '#/components/schemas/GeopodeBoundary'
+    GeopodeBoundaryResponse:
+      type: string
+      description: A success message with status code 200
+    GeopodeBoundary:
+      type: object
+      required:
+        - tenantId
+        - ISOCode
+      properties:
+        tenantId:
+          type: string
+          description: Unique tenant identifier.
+        ISOCode:
+          type: string
+          description: ISO code of a country
+          minLength: 2
+
+          items:
+            type: string
+            description: Residing boundaries of the facilities.
